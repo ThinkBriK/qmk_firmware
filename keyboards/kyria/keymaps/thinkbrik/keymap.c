@@ -19,7 +19,8 @@ enum layers {
     _QWERTY = 0,
     _LOWER,
     _RAISE,
-    _ADJUST
+    _ADJUST,
+    _GAMING
 };
 
 enum custom_keycodes {
@@ -37,7 +38,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
  * | LShift |   Z  |   X  |   C  |   V  |   B  |      |      |  |      |RShift|   N  |   M  | ,  < | . >  | /  ? |  - _   |
  * `----------------------+------+------+------+      +      |  |      +------+------+------+------+----------------------'
- *                        | GUI  | Del  | Space| Enter| Esc  |  | Enter|  Tab | space| Grave| OLED |
+ *                        | GUI  | Del  | Space| Enter| Esc  |  | Enter|  Tab | space| Grave| GAME |
  *                        |      |      | Alt  | Lower| Raise|  | Lower| Raise| AltGr|      |      |
  *                        `----------------------------------'  `----------------------------------'
 
@@ -46,7 +47,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       LT(_RAISE, KC_ESC),       KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,                                         KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
       MT(MOD_LCTL, KC_BSPC),   KC_A,   KC_S,   KC_D,   KC_F,   KC_G,                                         KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
       KC_LSFT,                 KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,   KC_LSFT,   KC_LSFT, KC_LSFT, KC_RSFT, KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_MINS,
-              KC_LGUI, KC_DEL, MT(MOD_LALT, KC_SPC), LT(_LOWER, KC_ENT), LT(_RAISE, KC_ESC), LT(_LOWER, KC_ENT), LT(_RAISE, KC_TAB), MT(MOD_RALT, KC_SPC),  KC_GRV, TOGGLE_OLED
+              KC_LGUI, KC_DEL, MT(MOD_LALT, KC_SPC), LT(_LOWER, KC_ENT), LT(_RAISE, KC_ESC), LT(_LOWER, KC_ENT), LT(_RAISE, KC_TAB), MT(MOD_RALT, KC_SPC),  KC_GRV, TG(_GAMING)
     ),
 /*
  * Lower Layer: Symbols
@@ -110,6 +111,28 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
     ),
     
+
+/*
+ *
+ * ,-------------------------------------------.                              ,-------------------------------------------.
+ * |  ESC   |      |      |  UP  |      |      |                              |      |      |      |      |      |        |
+ * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
+ * |  Ctrl  |      | LEFT | DOWN | RIGHT|      |                              |      |      |      |      |      |        |
+ * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
+ * |        |      |      |      |      |      |      |      |  |      |      |      |      |      |      |      |        |
+ * `----------------------+------+------+------+      +      |  |      +------+------+------+------+----------------------'
+ *                        |      |      | Space| Tab  | Alt  |  |      |      |      |      |      |
+ *                        |      |      |      |      |      |  |      |      |      |      |      |
+ *                        `----------------------------------'  `----------------------------------'
+
+ */
+    [_GAMING] = LAYOUT(
+      KC_ESC,     _______,   _______,     KC_UP,   _______,   _______,                                                _______,    _______,    _______,    _______,    _______,    _______,
+      MOD_LCTL,   _______,   KC_LEFT,   KC_DOWN,   KC_RIGHT,   _______,                                                _______,    _______,    _______,    _______,    _______,    _______,
+      _______,    _______,   _______,   _______,   _______,   _______,   _______,      _______, _______,   _______,   _______,    _______,    _______,    _______,    _______,    _______,
+                             _______,   _______,    KC_SPC,    KC_TAB,   KC_LALT,      _______,  _______,    _______,   _______,    _______
+    ),
+
 // /*
 //  * Layer template
 //  *
@@ -153,10 +176,12 @@ static void render_status(void) {
             break;
         case _RAISE:
             oled_write_P(PSTR("Raise\n\nLeft: Numbers + Media\n\nRight: Nummbers + Nav\n\n"), false);
-            
             break;
         case _ADJUST:
             oled_write_P(PSTR("Adjust\n\nLeft: Function + RGB\n\nRight: Function\n\n"), false);
+            break;
+        case _GAMING:
+            oled_write_P(PSTR("Gaming\n\nLeft: Gaming pad\n\nRight: Unused\n\n"), false);
             break;
         default:
             oled_write_P(PSTR("Undefined\n"), false);
