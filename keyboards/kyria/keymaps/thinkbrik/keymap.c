@@ -17,16 +17,11 @@
 
 enum layers {
     _QWERTY = 0,
-    _LOWER,
-    _RAISE,
-    _ADJUST,
-    _GAMING
+    _LOWER = 1,
+    _RAISE = 2,
+    _ADJUST = 3,
+    _GAMING = 4
 };
-
-enum custom_keycodes {
-    TOGGLE_OLED = SAFE_RANGE,
-};
-
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /*
@@ -38,7 +33,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
  * | LShift |   Z  |   X  |   C  |   V  |   B  |      |      |  |      |RShift|   N  |   M  | ,  < | . >  | /  ? |  - _   |
  * `----------------------+------+------+------+      +      |  |      +------+------+------+------+----------------------'
- *                        | GUI  | Del  | Space| Enter| Esc  |  | Enter|  Tab | space| Grave| GAME |
+ *                        | GUI  | Del  | Enter| Space| Esc  |  |  Tab | Space| Enter| Grave| GAME |
  *                        |      |      | Alt  | Lower| Raise|  | Lower| Raise| AltGr|      |      |
  *                        `----------------------------------'  `----------------------------------'
 
@@ -47,7 +42,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       LT(_RAISE, KC_ESC),       KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,                                         KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
       MT(MOD_LCTL, KC_BSPC),   KC_A,   KC_S,   KC_D,   KC_F,   KC_G,                                         KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
       KC_LSFT,                 KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,   KC_LSFT,   KC_LSFT, KC_LSFT, KC_RSFT, KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_MINS,
-              KC_LGUI, KC_DEL, MT(MOD_LALT, KC_SPC), LT(_LOWER, KC_ENT), LT(_RAISE, KC_ESC), LT(_LOWER, KC_ENT), LT(_RAISE, KC_TAB), MT(MOD_RALT, KC_SPC),  KC_GRV, TG(_GAMING)
+              KC_LGUI, KC_DEL, MT(MOD_LALT, KC_ENT), LT(_LOWER, KC_SPC), LT(_RAISE, KC_ESC), LT(_LOWER, KC_TAB), LT(_RAISE, KC_SPC), MT(MOD_RALT,KC_ENT),  KC_GRV, TG(_GAMING)
     ),
 /*
  * Lower Layer: Symbols
@@ -59,7 +54,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
  * |        |  %   |  ^   |  [   |  ]   |  ~   |      |      |  |      |      |   &  |  =   |  ,   |  .   |  / ? | - _    |
  * `----------------------+------+------+------+      +      |  |      +------+------+------+------+----------------------'
- *                        |      |      |      |  ;   |  =   |  |  =   |  ;   |      |  Del |      |
+ *                        |      |      |      |  ;   |  =   |  |  =   |  ;   |      |  ^   |      |
  *                        |      |      |      |      |      |  |      |      |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
  */
@@ -67,7 +62,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       _______, KC_EXLM, KC_AT,   KC_LCBR, KC_RCBR, KC_PIPE,                                     _______, _______, _______, _______, _______, KC_BSLS,
       _______, KC_HASH, KC_DLR,  KC_LPRN, KC_RPRN, KC_GRV,                                      KC_PLUS, KC_MINS, KC_SLSH, KC_ASTR, KC_PERC, KC_QUOT,
       _______, KC_PERC, KC_CIRC, KC_LBRC, KC_RBRC, KC_TILD, _______, _______, _______, _______, KC_AMPR, KC_EQL,  KC_COMM, KC_DOT,  KC_SLSH, KC_MINS,
-                                 _______, _______, _______, KC_SCLN, KC_EQL,  KC_EQL,  KC_SCLN, _______, KC_DEL, _______
+                                 _______, _______, _______, KC_SCLN, KC_EQL,  KC_EQL,  KC_SCLN, _______, KC_CIRC, _______
     ),
 /*
  * Raise Layer: Number keys, media, navigation
@@ -115,11 +110,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /*
  *
  * ,-------------------------------------------.                              ,-------------------------------------------.
- * |  ESC   |      |      |  UP  |      |      |                              |      |      |      |      |      |        |
+ * |  ESC   |      |      |      |      |      |                              |      |      |      |      |      |        |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |  Ctrl  |      | LEFT | DOWN | RIGHT|      |                              |      |      |      |      |      |        |
+ * |  Ctrl  |      |      |  UP  |      |      |                              |      |      |      |      |      |        |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * |        |      |      |      |      |      |      |      |  |      |      |      |      |      |      |      |        |
+ * |        |      | LEFT | DOWN | RIGHT|      |      |      |  |      |      |      |      |      |      |      |        |
  * `----------------------+------+------+------+      +      |  |      +------+------+------+------+----------------------'
  *                        |      |      | Space| Tab  | Alt  |  |      |      |      |      |      |
  *                        |      |      |      |      |      |  |      |      |      |      |      |
@@ -127,10 +122,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
  */
     [_GAMING] = LAYOUT(
-      KC_ESC,     _______,   _______,     KC_UP,   _______,   _______,                                                _______,    _______,    _______,    _______,    _______,    _______,
-      MOD_LCTL,   _______,   KC_LEFT,   KC_DOWN,   KC_RIGHT,   _______,                                                _______,    _______,    _______,    _______,    _______,    _______,
-      _______,    _______,   _______,   _______,   _______,   _______,   _______,      _______, _______,   _______,   _______,    _______,    _______,    _______,    _______,    _______,
-                             _______,   _______,    KC_SPC,    KC_TAB,   KC_LALT,      _______,  _______,    _______,   _______,    _______
+       KC_ESC,    _______,   _______,   _______,    _______,   _______,                                                 _______,    _______,    _______,    _______,    _______,    _______,
+      KC_LCTL,    _______,   _______,     KC_UP,    _______,   _______,                                                 _______,    _______,    _______,    _______,    _______,    _______,
+      _______,    _______,   KC_LEFT,   KC_DOWN,   KC_RIGHT,   _______,   _______,      _______, _______,    _______,   _______,    _______,    _______,    _______,    _______,    _______,
+                             _______,   _______,     KC_SPC,    KC_TAB,   KC_LALT,      _______, _______,    _______,   _______,    _______
     ),
 
 // /*
@@ -175,10 +170,10 @@ static void render_status(void) {
             oled_write_P(PSTR("Lower\n\nLeft: Code symbols\n\nRight: Math symbols\n\n"), false);
             break;
         case _RAISE:
-            oled_write_P(PSTR("Raise\n\nLeft: Numbers + Media\n\nRight: Nummbers + Nav\n\n"), false);
+            oled_write_P(PSTR("Raise\n\nLeft: Numbers/Media\n\nRight: Nummbers/Nav\n\n"), false);
             break;
         case _ADJUST:
-            oled_write_P(PSTR("Adjust\n\nLeft: Function + RGB\n\nRight: Function\n\n"), false);
+            oled_write_P(PSTR("Adjust\n\nLeft: Function/RGB\n\nRight: Function\n\n"), false);
             break;
         case _GAMING:
             oled_write_P(PSTR("Gaming\n\nLeft: Gaming pad\n\nRight: Unused\n\n"), false);
@@ -217,23 +212,6 @@ void oled_task_user(void) {
     }
 }
 #endif
-
-
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    switch(keycode){
-        case TOGGLE_OLED:
-            if (record->event.pressed) {
-                if (is_oled_on()){
-                    oled_off();
-                }
-                else {
-                    oled_on();
-                }
-            }
-            break;
-    }
-    return true;
-}
 
 
 #ifdef ENCODER_ENABLE

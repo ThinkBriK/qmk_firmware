@@ -45,3 +45,6 @@
 
 // Allows media codes to properly register in macros and rotary encoder code
 #define TAP_CODE_DELAY 10
+
+// As I won't have too many layers
+#define LAYER_STATE_8BIT
