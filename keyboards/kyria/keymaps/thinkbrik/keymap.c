@@ -16,14 +16,24 @@
 #include QMK_KEYBOARD_H
 
 enum custom_keycodes {
-  KC_A_GRAV  = SAFE_RANGE,
-  KC_SC_GRAV,
-  KC_M_CIRC,
-  KC_V_CIRC, 
+  KC_ACIRC  = SAFE_RANGE,
+  KC_ECIRC,
+  KC_ICIRC,
+  KC_OCIRC,
+  KC_UCIRC,
+  KC_AGRAVE,
+  KC_EGRAVE,
+  KC_UGRAVE,
+  KC_ETREMA,
+  KC_UTREMA,
+  KC_ITREMA,
 };
 
 enum layers {
     _QWERTY,
+    _CIRC,
+    _GRAVE,
+    _TREMA,
     _LOWER,
     _RAISE,
     _ADJUST,
@@ -36,9 +46,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-------------------------------------------.                              ,-------------------------------------------.
  * |   ESC  |   Q  |   W  |   E  |   R  |   T  |                              |   Y  |   U  |   I  |   O  |   P  |  BKSP  |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |   TAB  | A  ` |S/Alt |D/Ctrl|F/Shft|   G  |                              |   H  |J/Shft|K/Ctrl|L/RAlt| ;  ` |  ' "   |
+ * |   TAB  |A/GRAV|S/Alt |D/Ctrl|F/Shft|   G  |                              |   H  |J/Shft|K/Ctrl|L/RAlt|;/GRAV|  ' "   |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * | LShift |   Z  |   X  |   C  |  V/^ |   B  |      |      |  |      |RShift|   N  |  M/^ | ,  < | . >  | /  ? |  - _   |
+ * | LShift |   Z  |   X  |   C  |V/CIRC|B/TREM|      |      |  |      |RShift|N/TREM|M/CIRC| ,  < | . >  | /  ? |  - _   |
  * `----------------------+------+------+------+      +      |  |      +------+------+------+------+----------------------'
  *                        | GUI  | Del  | Enter| Space| Esc  |  |  Tab | Space| Enter| Grave| GAME |
  *                        |      |      |      | Lower| Raise|  | Lower| Raise|      |      |      |
@@ -46,10 +56,70 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
  */
     [_QWERTY] = LAYOUT(
-      KC_ESC,             KC_Q,         KC_W,         KC_E,         KC_R,         KC_T,                                                                                                       KC_Y,                 KC_U,         KC_I,         KC_O,         KC_P,           KC_BSPC,
-      KC_TAB,             KC_A_GRAV,    LALT_T(KC_S), LSFT_T(KC_D), LCTL_T(KC_F), KC_G,                                                                                                       KC_H,                 RCTL_T(KC_J), RSFT_T(KC_K), RALT_T(KC_L), KC_SC_GRAV, KC_QUOT,
-      KC_LSFT,            KC_Z,         KC_X,         KC_C,         KC_V_CIRC,    KC_B,                 KC_NO,              KC_NO,                    KC_NO,              KC_RSFT,            KC_N,                 KC_M_CIRC,    KC_COMM,      KC_DOT,       KC_SLSH,        KC_MINS,
-                                                      KC_LGUI,      KC_DEL,       KC_ENT,               LT(_LOWER, KC_SPC), LT(_RAISE, KC_ESC),       LT(_LOWER, KC_TAB), LT(_RAISE, KC_SPC), KC_ENT,               KC_GRV,       TG(_GAMING)
+      KC_ESC,             KC_Q,         KC_W,           KC_E,         KC_R,            KC_T,                                                                                                                 KC_Y,             KC_U,         KC_I,         KC_O,                 KC_P,        KC_BSPC,
+      KC_TAB,  LT(_GRAVE,KC_A), LALT_T(KC_S),   LSFT_T(KC_D), LCTL_T(KC_F),    KC_G,                                                                                                                 KC_H,     RCTL_T(KC_J), RSFT_T(KC_K), RALT_T(KC_L),   LT(_GRAVE,KC_SCLN),        KC_QUOT,
+      KC_LSFT,            KC_Z,         KC_X,           KC_C,         LT(_CIRC, KC_V), LT(_TREMA, KC_B),               KC_NO,              KC_NO,                    KC_NO,            KC_RSFT,  LT(_TREMA, KC_N),  LT(_CIRC, KC_M),      KC_COMM,       KC_DOT,              KC_SLSH,        KC_MINS,
+                                                     KC_LGUI,      KC_DEL,          KC_ENT,            LT(_LOWER, KC_SPC), LT(_RAISE, KC_ESC),       LT(_LOWER, KC_TAB), LT(_RAISE, KC_SPC),            KC_ENT,           KC_GRV,   TG(_GAMING)
+    ),
+/* 
+ * Circ Layer
+ *
+ //  * ,-------------------------------------------.                              ,-------------------------------------------.
+//  * |        |      |      |   Ê  |      |      |                              |      |   Û  |   Î  |   Ô  |      |        |
+//  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
+//  * |        |   Â  |      |      |      |      |                              |      |      |      |      |      |        |
+//  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
+//  * |        |      |      |      |      |      |      |      |  |      |      |      |      |      |      |      |        |
+//  * `----------------------+------+------+------+      +      |  |      +------+------+------+------+----------------------'
+//  *                        |      |      |      |      |      |  |      |      |      |      |      |
+//  *                        |      |      |      |      |      |  |      |      |      |      |      |
+//  *                        `----------------------------------'  `----------------------------------'
+//  */
+    [_CIRC] = LAYOUT(
+      _______,  _______, _______, KC_ECIRC, _______, _______,                                     _______, KC_UCIRC, KC_ICIRC, KC_OCIRC, _______, _______,
+      _______, KC_ACIRC, _______,  _______, _______, _______,                                     _______,  _______,  _______,  _______, _______, _______,
+      _______,  _______, _______,  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+                                   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
+     ),
+/*
+* Grave Layer
+*
+//  * ,-------------------------------------------.                              ,-------------------------------------------.
+//  * |        |      |      |   È  |      |      |                              |      |   Ù  |      |      |      |        |
+//  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
+//  * |        |   À  |      |      |      |      |                              |      |      |      |      |      |        |
+//  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
+//  * |        |      |      |      |      |      |      |      |  |      |      |      |      |      |      |      |        |
+//  * `----------------------+------+------+------+      +      |  |      +------+------+------+------+----------------------'
+//  *                        |      |      |      |      |      |  |      |      |      |      |      |
+//  *                        |      |      |      |      |      |  |      |      |      |      |      |
+//  *                        `----------------------------------'  `----------------------------------'
+//  */
+    [_GRAVE] = LAYOUT(
+    _______,   _______, _______, KC_EGRAVE, _______, _______,                                     _______, KC_UGRAVE, _______, _______, _______, _______,
+    _______, KC_AGRAVE, _______,   _______, _______, _______,                                     _______,   _______, _______, _______, _______, _______,
+    _______,   _______, _______,   _______, _______, _______, _______, _______, _______, _______, _______,   _______, _______, _______, _______, _______,
+                                   _______, _______, _______, _______, _______, _______, _______, _______,   _______, _______
+    ),
+/*
+* Trema Layer
+*
+//  * ,-------------------------------------------.                              ,-------------------------------------------.
+//  * |        |      |      |   Ë  |      |      |                              |      |   Ü  |   Ï  |      |      |        |
+//  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
+//  * |        |      |      |      |      |      |                              |      |      |      |      |      |        |
+//  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
+//  * |        |      |      |      |      |      |      |      |  |      |      |      |      |      |      |      |        |
+//  * `----------------------+------+------+------+      +      |  |      +------+------+------+------+----------------------'
+//  *                        |      |      |      |      |      |  |      |      |      |      |      |
+//  *                        |      |      |      |      |      |  |      |      |      |      |      |
+//  *                        `----------------------------------'  `----------------------------------'
+//  */
+    [_TREMA] = LAYOUT(
+    _______, _______, _______, KC_ETREMA, _______, _______,                                     _______, KC_UTREMA, KC_ITREMA, _______, _______, _______,
+    _______, _______, _______,   _______, _______, _______,                                     _______,   _______,   _______, _______, _______, _______,
+    _______, _______, _______,   _______, _______, _______, _______, _______, _______, _______, _______,   _______,   _______, _______, _______, _______,
+                                 _______, _______, _______, _______, _______, _______, _______, _______,   _______, _______
     ),
 /*
  * Lower Layer: Symbols
@@ -121,7 +191,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
  * |  Ctrl  |   A  |   S  |   D  |   F  |      |                              |      |   J  |   K  |   L  |   ;  |        |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * |        |      |      |      |      |      |      |      |  |      |      |      |      |      |      |      |        |
+ * |        |      |      |      |   V  |   B  |      |      |  |      |      |  N   |   M  |      |      |      |        |
  * `----------------------+------+------+------+      +      |  |      +------+------+------+------+----------------------'
  *                        |      |      | Space|  Y   |   U  |  |      |      |      |      |      |
  *                        |      |      |      |      |      |  |      |      |      |      |      |
@@ -131,8 +201,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_GAMING] = LAYOUT(
        KC_ESC,    _______,   _______,   _______,    _______,   _______,                                                 _______,    _______,    _______,    _______,    _______,    _______,
       KC_LCTL,       KC_A,      KC_S,      KC_D,       KC_F,   _______,                                                 _______,       KC_J,       KC_K,       KC_L,    KC_SCLN,    _______,
-      _______,    _______,   _______,   _______,    _______,   _______,   _______,      _______, _______,    _______,   _______,    _______,    _______,    _______,    _______,    _______,
-                             _______,   _______,     KC_SPC,      KC_Y,      KC_U,      _______, _______,    _______,   _______,    _______
+      _______,    _______,   _______,      KC_V,       KC_B,   _______,   _______,      _______,     _______, _______,     KC_N,       KC_M,    _______,    _______,    _______,    _______,
+                                        _______,   _______,     KC_SPC,      KC_Y,         KC_U,     _______, _______,  _______,    _______,    _______
     ),
 
 // /*
@@ -164,63 +234,86 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  static uint16_t my_hash_timer;
-  switch (keycode) {
-    case KC_M_CIRC:
-      if(record->event.pressed) {
-        my_hash_timer = timer_read();
-      } else {
-        if (timer_elapsed(my_hash_timer) < TAPPING_TERM) {
-             // Change the character(s) to be sent on tap here
-             tap_code(KC_M);
-           } else{
-              register_code16(S(KC_6));
-              unregister_code16(S(KC_6)); 
-        }
-      }
-      return false; // We handled this keypress
-
-    case KC_V_CIRC:
-      if(record->event.pressed) {
-        my_hash_timer = timer_read();
-      } else {
-        if (timer_elapsed(my_hash_timer) < TAPPING_TERM) {
-            // Change the character(s) to be sent on tap here
-             tap_code(KC_V);
-           } else{
+  if (record->event.pressed){
+    uint8_t temp_mods = get_mods();
+    switch (keycode) {
+        case KC_ACIRC:
+            clear_mods();
             register_code16(S(KC_6));
             unregister_code16(S(KC_6));
-        }
-      }
-      return false; // We handled this keypress
-
-    case KC_A_GRAV:
-      if(record->event.pressed) {
-        my_hash_timer = timer_read();
-      } else {
-        if (timer_elapsed(my_hash_timer) < TAPPING_TERM) {
-          tap_code(KC_A); // Change the character(s) to be sent on tap here
-        }
-        else {
-          tap_code(KC_GRAVE);
-        }
-      }
-      return false; // We handled this keypress
-
-    case KC_SC_GRAV:
-      if(record->event.pressed) {
-        my_hash_timer = timer_read();
-      } else {
-        if (timer_elapsed(my_hash_timer) < TAPPING_TERM) {
-          tap_code(KC_SCLN); // Change the character(s) to be sent on tap here
-        }
-        else {
-          tap_code(KC_GRAVE);
-        }
-      }
-      return false; // We handled this keypress
+            set_mods(temp_mods);
+            tap_code(KC_A);
+            break;
+        case KC_ECIRC:
+            clear_mods();
+            register_code16(S(KC_6));
+            unregister_code16(S(KC_6));
+            set_mods(temp_mods);
+            tap_code(KC_E);
+            break;
+        case KC_ICIRC:
+            clear_mods();
+            register_code16(S(KC_6));
+            unregister_code16(S(KC_6));
+            set_mods(temp_mods);
+            tap_code(KC_I);
+            break;
+        case KC_OCIRC:
+            clear_mods();
+            register_code16(S(KC_6));
+            unregister_code16(S(KC_6));
+            set_mods(temp_mods);
+            tap_code(KC_O);
+            break;
+        case KC_UCIRC:
+            clear_mods();
+            register_code16(S(KC_6));
+            unregister_code16(S(KC_6));
+            set_mods(temp_mods);
+            tap_code(KC_U);
+            break;
+        case KC_AGRAVE:
+            clear_mods();
+            tap_code(KC_GRAVE);
+            set_mods(temp_mods);
+            tap_code(KC_A);
+            break;
+        case KC_EGRAVE:
+            clear_mods();
+            tap_code(KC_GRAVE);
+            set_mods(temp_mods);
+            tap_code(KC_E);
+            break;
+        case KC_UGRAVE:
+            clear_mods();
+            tap_code(KC_GRAVE);
+            set_mods(temp_mods);
+            tap_code(KC_U);
+            break;
+        case KC_ETREMA:
+            clear_mods();
+            register_code16(S(KC_QUOT));
+            unregister_code16(S(KC_QUOT));
+            set_mods(temp_mods);
+            tap_code(KC_E);
+            break;
+        case KC_UTREMA:
+            clear_mods();
+            register_code16(S(KC_QUOT));
+            unregister_code16(S(KC_QUOT));
+            set_mods(temp_mods);
+            tap_code(KC_U);
+            break;
+        case KC_ITREMA:
+            clear_mods();
+            register_code16(S(KC_QUOT));
+            unregister_code16(S(KC_QUOT));
+            set_mods(temp_mods);
+            tap_code(KC_I);
+        break;
+    }
   }
-  return true; // We didn't handle other keypresses
+  return true;// We didn't handle other keypresses
 }
       
 #ifdef OLED_DRIVER_ENABLE
