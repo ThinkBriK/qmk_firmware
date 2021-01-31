@@ -38,13 +38,15 @@
 #define LEADER_TIMEOUT 350
 
 #define TAPPING_TERM 200
+#define TAPPING_TERM_PER_KEY
 
 // Allows to use either side as the master. Look at the documentation for info:
 // https://docs.qmk.fm/#/config_options?id=setting-handedness
 #define EE_HANDS
 
-// Allows media codes to properly register in macros and rotary encoder code
+// Allows media codes to properly register in macros and rotary encoder             
 #define TAP_CODE_DELAY 10
+
 
 // As I won't have too many layers
 #define LAYER_STATE_8BIT

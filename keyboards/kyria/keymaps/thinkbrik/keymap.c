@@ -15,23 +15,30 @@
  */
 #include QMK_KEYBOARD_H
 
+enum custom_keycodes {
+  KC_A_GRAV  = SAFE_RANGE,
+  KC_SC_GRAV,
+  KC_M_CIRC,
+  KC_V_CIRC, 
+};
+
 enum layers {
-    _QWERTY = 0,
-    _LOWER = 1,
-    _RAISE = 2,
-    _ADJUST = 3,
-    _GAMING = 4
+    _QWERTY,
+    _LOWER,
+    _RAISE,
+    _ADJUST,
+    _GAMING
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /*
  *
  * ,-------------------------------------------.                              ,-------------------------------------------.
- * |ESC/RAIS|   Q  |   W  |   E  |   R  |   T  |                              |   Y  |   U  |   I  |   O  |   P  |  BKSP  |
+ * |   ESC  |   Q  |   W  |   E  |   R  |   T  |                              |   Y  |   U  |   I  |   O  |   P  |  BKSP  |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |   TAB  | A/Alt|S/RAlt|D/Ctrl|F/Shft|   G  |                              |   H  |J/Shft|K/Ctrl|L/RAlt|;/Alt |  ' "   |
+ * |   TAB  | A  ` |S/Alt |D/Ctrl|F/Shft|   G  |                              |   H  |J/Shft|K/Ctrl|L/RAlt| ;  ` |  ' "   |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * | LShift |   Z  |   X  |   C  |   V  |   B  |      |      |  |      |RShift|   N  |   M  | ,  < | . >  | /  ? |  - _   |
+ * | LShift |   Z  |   X  |   C  |  V/^ |   B  |      |      |  |      |RShift|   N  |  M/^ | ,  < | . >  | /  ? |  - _   |
  * `----------------------+------+------+------+      +      |  |      +------+------+------+------+----------------------'
  *                        | GUI  | Del  | Enter| Space| Esc  |  |  Tab | Space| Enter| Grave| GAME |
  *                        |      |      |      | Lower| Raise|  | Lower| Raise|      |      |      |
@@ -39,12 +46,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
  */
     [_QWERTY] = LAYOUT(
-      KC_GESC, KC_Q,         KC_W,         KC_E,         KC_R,         KC_T,                                                                                                       KC_Y,                 KC_U,         KC_I,         KC_O,         KC_P,           KC_BSPC,
-      KC_TAB,            LGUI_T(KC_A), LALT_T(KC_S), LSFT_T(KC_D), LCTL_T(KC_F), KC_G,                                                                                                       KC_H,                 RCTL_T(KC_J), RSFT_T(KC_K), RALT_T(KC_L), RGUI_T(KC_SCLN), KC_QUOT,
-      KC_LSFT,            KC_Z,         KC_X,         KC_C,         KC_V,         KC_B,                 KC_NO,              KC_NO,                    KC_NO,              KC_RSFT,            KC_N,                 KC_M,         KC_COMM,      KC_DOT,       KC_SLSH,        KC_MINS,
+      KC_ESC,             KC_Q,         KC_W,         KC_E,         KC_R,         KC_T,                                                                                                       KC_Y,                 KC_U,         KC_I,         KC_O,         KC_P,           KC_BSPC,
+      KC_TAB,             KC_A_GRAV,    LALT_T(KC_S), LSFT_T(KC_D), LCTL_T(KC_F), KC_G,                                                                                                       KC_H,                 RCTL_T(KC_J), RSFT_T(KC_K), RALT_T(KC_L), KC_SC_GRAV, KC_QUOT,
+      KC_LSFT,            KC_Z,         KC_X,         KC_C,         KC_V_CIRC,    KC_B,                 KC_NO,              KC_NO,                    KC_NO,              KC_RSFT,            KC_N,                 KC_M_CIRC,    KC_COMM,      KC_DOT,       KC_SLSH,        KC_MINS,
                                                       KC_LGUI,      KC_DEL,       KC_ENT,               LT(_LOWER, KC_SPC), LT(_RAISE, KC_ESC),       LT(_LOWER, KC_TAB), LT(_RAISE, KC_SPC), KC_ENT,               KC_GRV,       TG(_GAMING)
     ),
-/*æ
+/*
  * Lower Layer: Symbols
  *
  * ,-------------------------------------------.                              ,-------------------------------------------.
@@ -154,6 +161,68 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
 }
 
+
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  static uint16_t my_hash_timer;
+  switch (keycode) {
+    case KC_M_CIRC:
+      if(record->event.pressed) {
+        my_hash_timer = timer_read();
+      } else {
+        if (timer_elapsed(my_hash_timer) < TAPPING_TERM) {
+             // Change the character(s) to be sent on tap here
+             tap_code(KC_M);
+           } else{
+              register_code16(S(KC_6));
+              unregister_code16(S(KC_6)); 
+        }
+      }
+      return false; // We handled this keypress
+
+    case KC_V_CIRC:
+      if(record->event.pressed) {
+        my_hash_timer = timer_read();
+      } else {
+        if (timer_elapsed(my_hash_timer) < TAPPING_TERM) {
+            // Change the character(s) to be sent on tap here
+             tap_code(KC_V);
+           } else{
+            register_code16(S(KC_6));
+            unregister_code16(S(KC_6));
+        }
+      }
+      return false; // We handled this keypress
+
+    case KC_A_GRAV:
+      if(record->event.pressed) {
+        my_hash_timer = timer_read();
+      } else {
+        if (timer_elapsed(my_hash_timer) < TAPPING_TERM) {
+          tap_code(KC_A); // Change the character(s) to be sent on tap here
+        }
+        else {
+          tap_code(KC_GRAVE);
+        }
+      }
+      return false; // We handled this keypress
+
+    case KC_SC_GRAV:
+      if(record->event.pressed) {
+        my_hash_timer = timer_read();
+      } else {
+        if (timer_elapsed(my_hash_timer) < TAPPING_TERM) {
+          tap_code(KC_SCLN); // Change the character(s) to be sent on tap here
+        }
+        else {
+          tap_code(KC_GRAVE);
+        }
+      }
+      return false; // We handled this keypress
+  }
+  return true; // We didn't handle other keypresses
+}
+      
 #ifdef OLED_DRIVER_ENABLE
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
 	return OLED_ROTATION_180;
