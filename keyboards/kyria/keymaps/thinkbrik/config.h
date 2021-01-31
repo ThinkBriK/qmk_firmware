@@ -20,22 +20,10 @@
   #define OLED_DISPLAY_128X64
 #endif
 
-#ifdef RGBLIGHT_ENABLE
-  #define RGBLIGHT_ANIMATIONS
-  #define RGBLIGHT_HUE_STEP 8
-  #define RGBLIGHT_SAT_STEP 8
-  #define RGBLIGHT_VAL_STEP 8
-  #define RGBLIGHT_SLEEP
-#endif
-
 // EC11K encoders have a different resolution than other EC11 encoders.
 // When using the default resolution of 4, if you notice your encoder skipping
 // every other tick, lower the resolution to 2.
 #define ENCODER_RESOLUTION 2
-
-// The Leader key allows to flexibly assign macros to key sequences.
-#define LEADER_PER_KEY_TIMING
-#define LEADER_TIMEOUT 350
 
 #define TAPPING_TERM 200
 #define TAPPING_TERM_PER_KEY
@@ -50,3 +38,16 @@
 
 // As I won't have too many layers
 #define LAYER_STATE_8BIT
+
+#define SPLIT_USB_DETECT
+#define NO_USB_STARTUP_CHECK
+#define SPLIT_USB_TIMEOUT 1000
+
+#define MASTER_RIGHT
+#define ENCODER_DIRECTION_FLIP
+
+
+#define NO_ACTION_MACRO
+#define NO_ACTION_FUNCTION
+#define NO_ACTION_ONESHOT
+#define OLED_FONT_END 127
